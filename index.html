@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños! ✨🍓</title>
+    
+    <!-- Tailwind CSS para diseño responsivo y utilidades -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Playfair Display & Dancing Script (cursiva sutil) + Poppins (lectura limpia) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* Variables de color y configuración base oscura con acentos rositas */
+        :root {
+            --bg-dark: #0a080c;
+            --bg-plum: #1a1019;
+            --pink-soft: #ffb3d1;
+            --pink-glow: #ff7eb3;
+            --pink-deep: #d64584;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #261224 0%, #0d090f 55%, #070509 100%);
+            color: #fce7f3;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Tipografía cursiva sutil y estética */
+        .font-cursive-subtle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+
+        .font-cursive-accent {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Efecto Glassmorphism oscuro con destello rosita */
+        .glass-card {
+            background: rgba(24, 15, 25, 0.76);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 179, 209, 0.25);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 126, 179, 0.14);
+        }
+
+        /* Brillo neón suave rosita */
+        .pink-text-glow {
+            color: #ffb3d1;
+            text-shadow: 0 0 20px rgba(255, 126, 179, 0.6);
+        }
+
+        /* Animación de flotación para fresitas en el minijuego */
+        @keyframes floatStrawberry {
+            0% {
+                transform: translateY(0px) rotate(-8deg) scale(1);
+            }
+            50% {
+                transform: translateY(-16px) rotate(10deg) scale(1.08);
+            }
+            100% {
+                transform: translateY(0px) rotate(-8deg) scale(1);
+            }
+        }
+
+        .strawberry-target {
+            position: absolute;
+            cursor: pointer;
+            font-size: 2.7rem;
+            filter: drop-shadow(0 0 14px rgba(255, 110, 165, 0.75));
+            animation: floatStrawberry 2.3s ease-in-out infinite;
+            transition: transform 0.15s ease, opacity 0.2s ease;
+            z-index: 30;
+            padding: 12px;
+        }
+
+        .strawberry-target:active {
+            transform: scale(1.4);
+        }
+
+        /* Animación para los micro-mensajes flotantes al atrapar una fresa */
+        @keyframes popUpFade {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.85);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scale(1.12);
+            }
+        }
+
+        .floating-feedback {
+            position: absolute;
+            pointer-events: none;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 600;
+            color: #ffb3d1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 14px rgba(255, 126, 179, 0.85);
+            animation: popUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            z-index: 40;
+            white-space: nowrap;
+        }
+
+        /* Barras de ecualizador animadas para el reproductor de música */
+        @keyframes eqBounce {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
+        }
+
+        .eq-bar {
+            width: 3px;
+            background-color: #ff85b3;
+            border-radius: 9999px;
+            transition: height 0.2s ease;
+        }
+
+        .eq-playing .eq-bar:nth-child(1) { animation: eqBounce 0.7s infinite ease-in-out; }
+        .eq-playing .eq-bar:nth-child(2) { animation: eqBounce 0.5s infinite ease-in-out 0.15s; }
+        .eq-playing .eq-bar:nth-child(3) { animation: eqBounce 0.8s infinite ease-in-out 0.3s; }
+        .eq-playing .eq-bar:nth-child(4) { animation: eqBounce 0.6s infinite ease-in-out 0.1s; }
+
+        /* Marco estilo Polaroid oscuro/rosita para la foto */
+        .photo-frame {
+            background: linear-gradient(145deg, #211420, #110b11);
+            border: 1px solid rgba(255, 179, 209, 0.38);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85), 0 0 28px rgba(255, 133, 179, 0.2);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .photo-frame:hover {
+            transform: rotate(0deg) scale(1.03);
+        }
+    </style>
+</head>
+<body class="relative flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+
+    <!-- Canvas de fondo para partículas ambientales y confeti/pétalos rositas -->
+    <canvas id="effectsCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- Reproductor oculto de YouTube para "Estranged - Guns N' Roses" -->
+    <div class="fixed -top-96 -left-96 opacity-0 pointer-events-none">
+        <div id="youtube-player"></div>
+    </div>
+
+    <!-- Barra flotante minimalista de música (Guns N' Roses - Estranged) -->
+    <div id="musicBar" class="fixed top-4 right-4 z-40 glass-card rounded-full px-4 py-2 flex items-center gap-3 transition-all duration-500">
+        <div id="eqContainer" class="flex items-end gap-1 h-4">
+            <span class="eq-bar h-1"></span>
+            <span class="eq-bar h-2"></span>
+            <span class="eq-bar h-1"></span>
+            <span class="eq-bar h-2"></span>
+        </div>
+        <div class="text-xs leading-tight pr-1">
+            <p class="font-cursive-subtle text-pink-200 font-semibold text-sm">Estranged</p>
+            <p class="text-pink-300/70 text-[10px]">Guns N' Roses</p>
+        </div>
+        <button id="musicToggleBtn" onclick="toggleMusic()" aria-label="Reproducir o pausar música"
+            class="w-8 h-8 rounded-full bg-pink-500/20 hover:bg-pink-500/40 border border-pink-300/40 flex items-center justify-center text-pink-200 transition active:scale-90 cursor-pointer">
+            <span id="musicIcon">▶</span>
+        </button>
+    </div>
+
+    <!-- =====================================================================
+         FASE 1: MINIJUEGO DE INICIO (ATRAPAR 10 FRESITAS)
+    ====================================================================== -->
+    <section id="minigameOverlay" class="fixed inset-0 z-30 flex flex-col items-center justify-between p-5 sm:p-8 bg-[#0a070c]/95 backdrop-blur-md transition-opacity duration-700">
+        
+        <!-- Encabezado del minijuego -->
+        <div class="mt-14 sm:mt-10 text-center max-w-md mx-auto z-20 pointer-events-none">
+            <span class="inline-block px-3.5 py-1 rounded-full text-xs tracking-wider uppercase bg-pink-500/15 border border-pink-400/30 text-pink-300 mb-3">
+                Filtro de Seguridad Fresa ✨
+            </span>
+            <h1 class="font-cursive-subtle text-3xl sm:text-4xl font-bold pink-text-glow mb-2">
+                ¡Espera tantito!
+            </h1>
+            <p class="text-pink-100/85 text-sm sm:text-base font-light">
+                Atrapa <span class="text-pink-300 font-semibold">10 fresitas</span> flotantes para desbloquear tu sorpresa de cumpleaños 🍓
+            </p>
+        </div>
+
+        <!-- Área interactiva donde aparecen y se mueven las fresas -->
+        <div id="gameArena" class="relative w-full max-w-3xl flex-1 my-4 overflow-hidden rounded-3xl border border-pink-400/20 bg-gradient-to-b from-pink-500/[0.04] to-transparent shadow-inner">
+            <!-- Las fresitas se generan dinámicamente vía JS aquí -->
+        </div>
+
+        <!-- Barra de progreso y contador -->
+        <div class="w-full max-w-xs mx-auto mb-5 text-center z-20 pointer-events-none">
+            <div class="flex justify-between items-center text-xs text-pink-200/90 mb-2 px-1">
+                <span class="font-cursive-subtle text-base">Nivel fresa acumulado:</span>
+                <span id="scoreText" class="font-semibold text-pink-300 text-sm">0 / 10 🍓</span>
+            </div>
+            <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden p-0.5 border border-pink-300/30">
+                <div id="progressBar" class="h-full w-0 bg-gradient-to-r from-pink-500 via-pink-400 to-rose-300 rounded-full transition-all duration-300 shadow-[0_0_14px_rgba(255,126,179,0.85)]"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         FASE 2: TARJETA PRINCIPAL DE CUMPLEAÑOS (SE DESBLOQUEA AL GANAR)
+    ====================================================================== -->
+    <main id="birthdayCardContainer" class="hidden opacity-0 transition-all duration-1000 transform translate-y-6 w-full max-w-lg mx-auto my-14 sm:my-10 z-20">
+        
+        <article class="glass-card rounded-3xl p-6 sm:p-9 relative overflow-hidden">
+            
+            <!-- Destellos decorativos de fondo -->
+            <div class="absolute -top-24 -right-24 w-52 h-52 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-52 h-52 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Cabecera -->
+            <header class="text-center mb-6">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/15 border border-pink-300/30 text-pink-200 text-xs mb-3">
+                    <span>🍓</span>
+                    <span class="tracking-wide uppercase">Edición Especial de Cumpleaños</span>
+                    <span>✨</span>
+                </div>
+                
+                <h1 class="font-cursive-subtle text-4xl sm:text-5xl font-bold pink-text-glow leading-tight">
+                    ¡Feliz Cumpleaños!
+                </h1>
+                
+                <p class="font-cursive-accent text-pink-200/95 text-2xl sm:text-3xl mt-1">
+                    Un año más tirando rostro y buen estilo ✨
+                </p>
+            </header>
+
+            <!-- Marco estilo Polaroid oscuro con la fotografía -->
+            <div class="my-6 flex justify-center">
+                <div class="photo-frame p-3.5 pb-5 rounded-2xl -rotate-2 max-w-[260px] sm:max-w-[285px] w-full">
+                    <div class="relative overflow-hidden rounded-xl aspect-[4/5] bg-[#160f16]">
+                        <img 
+                            src="https://i.postimg.cc/3RX62mZZ/IMG-20260712-WA0000.jpg" 
+                            alt="Foto de cumpleaños" 
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x500/1a1019/ffb3d1?text=Feliz+Cumple+%F0%9F%8D%93';"
+                            class="w-full h-full object-cover object-center"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0b090d]/55 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <p class="font-cursive-subtle text-pink-200 text-sm sm:text-base tracking-wide">
+                            Siempre impecable ✨🍓
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensaje de cumpleaños relajado y con buen cotorreo sano -->
+            <div class="space-y-4 text-center sm:text-left text-pink-100/95 text-sm sm:text-base leading-relaxed bg-black/35 rounded-2xl p-5 sm:p-6 border border-pink-300/20">
+                <p class="font-cursive-subtle text-pink-200 text-base sm:text-lg">
+                    ¡Muchas felicidades en tu día! Espero que te la pases increíble, que te consientan mucho y que sigas acumulando buenos momentos este nuevo año.
+                </p>
+                <p class="font-cursive-subtle text-pink-100/90 text-base sm:text-lg">
+                    Hay que reconocerlo: siempre traes los mejores <span class="text-pink-300 font-semibold">outfits</span> y un estilo súper top, combinando a la perfección ese toque medio fresa con tus repentinos ataques de <span class="text-pink-300 font-semibold">"esquizofrenia"</span> y locura divertida que hacen que cualquier plática valga oro.
+                </p>
+                <p class="font-cursive-subtle text-pink-100/90 text-base sm:text-lg">
+                    Aunque platiquemos de vez en cuando o salgamos a caminar literalmente <span class="text-pink-300 font-semibold">cada 100 años</span>, siempre es un gustazo coincidir, pedirnos algún paro o simplemente echar buen cotorreo sano.
+                </p>
+                <p class="font-cursive-accent text-pink-300 text-2xl sm:text-3xl text-center pt-2">
+                    ¡Pásala a todo dar hoy y siempre! 🥂🍓
+                </p>
+            </div>
+
+            <!-- Botones interactivos para lanzar pétalos/confeti o repetir minijuego -->
+            <div class="mt-7 flex flex-col items-center gap-3">
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <button id="wishBtn" onclick="celebrateBirthday()" 
+                        class="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500/85 to-rose-400/85 hover:from-pink-500 hover:to-rose-400 text-white font-medium text-sm shadow-[0_0_25px_rgba(255,126,179,0.5)] border border-pink-200/40 transition-all duration-300 active:scale-95 cursor-pointer">
+                        <span>Lanzar destellos rositas</span>
+                        <span class="group-hover:rotate-12 transition-transform">🌸</span>
+                    </button>
+
+                    <button onclick="replayMinigame()" 
+                        class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-pink-500/15 hover:bg-pink-500/25 text-pink-200 font-medium text-sm border border-pink-300/35 transition-all duration-300 active:scale-95 cursor-pointer">
+                        <span>Repetir minijuego 🍓</span>
+                    </button>
+                </div>
+                
+                <!-- Mensaje dinámico al presionar el botón -->
+                <p id="wishFeedback" class="font-cursive-subtle text-pink-300 text-sm sm:text-base text-center min-h-[24px] opacity-0 transition-opacity duration-500">
+                    ¡Que nunca falten los buenos outfits ni las caminatas cada 100 años! ✨🥂
+                </p>
+            </div>
+
+        </article>
+    </main>
+
+    <!-- =====================================================================
+         LÓGICA DE JAVASCRIPT (WEB AUDIO API, MINIJUEGO, YOUTUBE Y PARTÍCULAS)
+    ====================================================================== -->
+    <script>
+        // --- VARIABLES GLOBALES ---
+        let caughtCount = 0;
+        const targetCount = 10;
+        let gameCompleted = false;
+        let spawnInterval = null;
+        let ytPlayer = null;
+        let isMusicPlaying = false;
+        let audioCtx = null;
+
+        // Frases divertidas / sarcásticas al atrapar cada fresita
+        const catchPhrases = [
+            "+1 fresa 🍓",
+            "¡outfit check! ✨",
+            "modo esquizo activado 🤪",
+            "caminata cada 100 años",
+            "nivel fresa +1 💅",
+            "¡qué buen estilo! 🌸",
+            "cero intensidad, puro cotorreo",
+            "impecable como siempre 🖤",
+            "¡ya casi se arma!",
+            "¡sorpresa desbloqueada! 🎉"
+        ];
+
+        // --- EFECTO DE SONIDO DULCE CON WEB AUDIO API NATIVA ---
+        function playSweetPopSound(step) {
+            try {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                // Escala ascendente dulce (Do mayor pentatónica)
+                const frequencies = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51, 1567.98, 1760.00];
+                const freq = frequencies[Math.min(step - 1, frequencies.length - 1)];
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+                osc.frequency.exponentialRampToValueAtTime(freq * 1.25, now + 0.14);
+
+                gainNode.gain.setValueAtTime(0.001, now);
+                gainNode.gain.linearRampToValueAtTime(0.18, now + 0.02);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.26);
+            } catch (e) {
+                // Ignorar si el navegador restringe audio
+            }
+        }
+
+        // --- INTEGRACIÓN DE YOUTUBE API ("ESTRANGED" - GUNS N' ROSES) ---
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('youtube-player', {
+                height: '10',
+                width: '10',
+                videoId: 'dpmAY059TTY', // Guns N' Roses - Estranged
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'dpmAY059TTY',
+                    'playsinline': 1
+                },
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            const eqContainer = document.getElementById('eqContainer');
+            const musicIcon = document.getElementById('musicIcon');
+            if (event.data === YT.PlayerState.PLAYING) {
+                isMusicPlaying = true;
+                eqContainer.classList.add('eq-playing');
+                musicIcon.textContent = '⏸';
+            } else {
+                isMusicPlaying = false;
+                eqContainer.classList.remove('eq-playing');
+                musicIcon.textContent = '▶';
+            }
+        }
+
+        function startMusic() {
+            if (ytPlayer && typeof ytPlayer.playVideo === 'function' && !isMusicPlaying) {
+                try {
+                    ytPlayer.setVolume(75);
+                    ytPlayer.playVideo();
+                } catch (e) {}
+            }
+        }
+
+        function toggleMusic() {
+            if (!ytPlayer || typeof ytPlayer.playVideo !== 'function') return;
+            if (isMusicPlaying) {
+                ytPlayer.pauseVideo();
+            } else {
+                ytPlayer.playVideo();
+            }
+        }
+
+        // --- LÓGICA DEL MINIJUEGO DE LAS 10 FRESITAS ---
+        const gameArena = document.getElementById('gameArena');
+        const scoreText = document.getElementById('scoreText');
+        const progressBar = document.getElementById('progressBar');
+
+        function spawnStrawberry() {
+      
